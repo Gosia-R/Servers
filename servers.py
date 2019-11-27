@@ -4,7 +4,8 @@
 
 from typing import Optional, List
 from abc import ABC, abstractmethod
-from re import fullmatch, match
+from re import fullmatch
+
 
 class Product:
     def __init__(self, name: str, price: float):
@@ -25,9 +26,8 @@ class TooManyProductsFoundError(Exception):
 #  wyników wyszukiwania, (3) możliwość odwołania się do metody `get_entries(self, n_letters)` zwracającą listę produktów
 #  spełniających kryterium wyszukiwania
 
+
 class Server(ABC):
-
-
     @abstractmethod
     def get_entries(self, n_letters: int = 1) -> List[Product]:
         pass
@@ -83,7 +83,6 @@ class MapServer(Server):
 
 
 class Client:
-
     def __init__(self, server: Server):
         self.server = server
 
