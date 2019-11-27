@@ -1,0 +1,33 @@
+class Product {
+  + name: str
+  + price: float
+
+}
+
+abstract class Server {
+  + {abstract} server_type(): str
+  + {abstract} get_entries(n_letters: int): List[Product]
+}
+
+class ListServer{
++ n_max_returned_entries: int
++ products:List[Product]
++ get_entries(n_letters: int): List[Product] 
+}
+
+class MapServer{
++ n_max_returned_entries: int
++ products:List[Product]
++ get_entries(n_letters: int): List[Product] 
+}
+
+class Client{
++ server: Server
++ get_total_price(n_letters: int): float
+}
+
+ABC <|-- Server
+Server <|.. MapServer
+Server <|.. ListServer
+Client ..> Server : << uses >>
+Product ..> Server : << uses >>
