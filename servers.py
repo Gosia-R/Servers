@@ -2,9 +2,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from typing import Optional, List
 from abc import ABC, abstractmethod
 from re import fullmatch
+from typing import Optional, List
 
 
 class Product:
@@ -28,6 +28,8 @@ class TooManyProductsFoundError(Exception):
 
 
 class Server(ABC):
+    n_max_returned_entries = 3
+
     @abstractmethod
     def get_entries(self, n_letters: int = 1) -> List[Product]:
         pass
@@ -36,7 +38,6 @@ class Server(ABC):
 class ListServer(Server):
     def __init__(self, list_of_products: List[Product],*args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.n_max_returned_entries = 4
         self.products = list_of_products[:]
 
     def get_entries(self, n_letters: int = 1) -> List[Product]:
@@ -46,40 +47,35 @@ class ListServer(Server):
             product_found = fullmatch(regex_string, product.name)
             if product_found is not None:
                 products_found.append(product)
-        try:
-            if len(products_found) > self.n_max_returned_entries:
-                products_found = []
-                raise TooManyProductsFoundError
-
-            else:
-                products_found.sort(key=lambda product: product.price)
-        except TooManyProductsFoundError:
-            print('Too many products found')
-        return products_found
+        if len(products_found) > self.n_max_returned_entries:
+            raise TooManyProductsFoundError
+        else:
+            products_found.sort(key=lambda product: product.price)
+            return products_found
 
 
 class MapServer(Server):
     def __init__(self, list_of_products: List[Product], *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.n_max_returned_entries = 4
         self.products = {product.name: product for product in list_of_products}
 
     def get_entries(self, n_letters: int = 1) -> List[Product]:
         products_found = []
+        # regex sprawdzajacy nazwe
         regex_string = r'^[a-zA-Z]{' + str(n_letters) + r'}\d{2,3}'
         for product in self.products.keys():
             product_found = fullmatch(regex_string, product)
+
+            # jesli znaleziono produkty to je dodaj do listy produktow
             if product_found is not None:
                 products_found.append(self.products[product])
-        try:
-            if len(products_found) > self.n_max_returned_entries:
-                products_found = []
-                raise TooManyProductsFoundError
-            else:
-                products_found.sort(key=lambda product: product.price)
-        except TooManyProductsFoundError:
-            pass
-        return products_found
+
+        # rzuc wyjatek jesli liczba produkow przekracza zalozona wartosc
+        if len(products_found) > self.n_max_returned_entries:
+            raise TooManyProductsFoundError
+        else:
+            products_found.sort(key=lambda product: product.price)
+            return products_found
 
 
 class Client:
@@ -89,10 +85,10 @@ class Client:
     # FIXME: klasa powinna posiadać metodę inicjalizacyjną przyjmującą obiekt reprezentujący serwer
 
     def get_total_price(self, n_letters: Optional[int]) -> Optional[float]:
-        products_found = self.server.get_entries(n_letters)
-        if products_found:
+        # jesli liczba produktow nie przekracza z gory zalozonej wartosci to sumujemy
+        try:
+            products_found = self.server.get_entries(n_letters)
             total_price = sum(product.price for product in products_found)
-        else:
-            total_price = None
-        return total_price
-
+            return total_price
+        except TooManyProductsFoundError:
+            return None

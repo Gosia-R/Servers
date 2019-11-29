@@ -31,14 +31,14 @@ class ClientTest(unittest.TestCase):
             server = server_type(products)
             client = Client(server)
             self.assertEqual(0, client.get_total_price(3))
-            
-     def test_total_price_for_too_many_entries_execution(self):
+
+    def test_total_price_for_too_many_entries_execution(self):
         products = [Product('PP234', 2), Product('PP235', 3), Product('PP236', 4), Product('PP237', 1), Product('PP238', 3)]
         for server_type in server_types:
             server = server_type(products)
             client = Client(server)
-            #nie wiem tu do czego porównać
-            self.assertEqual(5, client.get_total_price(2))
+            # nie wiem tu do czego porównać Do None ~ Kamil
+            self.assertEqual(None, client.get_total_price(2))
 
 
 if __name__ == '__main__':
