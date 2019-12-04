@@ -26,8 +26,12 @@ class Client{
 + get_total_price(n_letters: int): float
 }
 
+class TooManyProductsFoundError{
+}
+
 ABC <|-- Server
 Server <|.. MapServer
 Server <|.. ListServer
 Client ..> Server : << uses >>
 Product ..> Server : << uses >>
+Server ..> TooManyProductsFoundError : <<throws>>
