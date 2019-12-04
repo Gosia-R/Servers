@@ -5,7 +5,7 @@
 from abc import ABC, abstractmethod
 from re import fullmatch
 from typing import Optional, List
-
+from copy import deepcopy
 
 class Product:
 
@@ -39,13 +39,13 @@ class Server(ABC):
 
     @abstractmethod
     def get_entries(self, n_letters: int = 1) -> List[Product]:
-        pass
+        raise NotImplemented
 
 
 class ListServer(Server):
-    def __init__(self, list_of_products: List[Product],*args, **kwargs):
+    def __init__(self, list_of_products: List[Product], *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.products = list_of_products[:]
+        self.products = deepcopy(list_of_products)
 
     def get_entries(self, n_letters: int = 1) -> List[Product]:
         regex_string = r'^[a-zA-z]{' + str(n_letters) + r'}\d{2,3}'
