@@ -1,13 +1,12 @@
 import unittest
 from collections import Counter
 
-from servers import Server, ListServer, Product, Client, MapServer,TooManyProductsFoundError
+from servers import Server, ListServer, Product, Client, MapServer, TooManyProductsFoundError
 
 server_types = (ListServer, MapServer)
 
 
 class ServerTest(unittest.TestCase):
-
     def test_get_entries_returns_proper_entries(self):
         products = [Product('P12', 1), Product('PP234', 2), Product('PP235', 1)]
         for server_type in server_types:
