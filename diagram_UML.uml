@@ -35,3 +35,4 @@ Server <|.. ListServer
 Client ..> Server : << uses >>
 Product ..> Server : << uses >>
 Server ..> TooManyProductsFoundError : <<throws>>
+hide empty members
