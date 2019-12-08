@@ -1,3 +1,4 @@
+@startuml
 class Product {
   + name: str
   + price: float
@@ -36,3 +37,4 @@ Client ..> Server : << uses >>
 Product ..> Server : << uses >>
 Server ..> TooManyProductsFoundError : <<throws>>
 hide empty members
+@enduml
