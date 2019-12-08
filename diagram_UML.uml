@@ -36,5 +36,6 @@ Server <|.. ListServer
 Client ..> Server : << uses >>
 Product ..> Server : << uses >>
 Server ..> TooManyProductsFoundError : <<throws>>
+Exception <|-- TooManyProductsFoundError
 hide empty members
 @enduml
