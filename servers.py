@@ -95,6 +95,9 @@ class Client:
         # jesli liczba produktow nie przekracza z gory zalozonej wartosci to sumujemy
         try:
             products_found = self.server.get_entries(n_letters)
+            #POPRAWA żeby zwracało None
+            if len(products_found)==0:
+                return None
             total_price = sum(product.price for product in products_found)
             return total_price
         except TooManyProductsFoundError:
